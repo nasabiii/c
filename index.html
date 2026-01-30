@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Na yêu - Final Fixed</title>
+    <title>happy 19th celinnei</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,12 +94,12 @@
     </script>
 </head>
 <body>
-    <div id="loading-screen"><div class="spinner"></div><div class="loader-text">Loading Love...</div></div>
+    <div id="loading-screen"><div class="spinner"></div><div class="loader-text">Loading...</div></div>
     <div id="background-layer"></div><div id="noise-overlay"></div><div id="canvas-container"></div>
     <canvas id="visualizer-canvas"></canvas>
     <div id="ui-layer">
-        <h1 id="main-title">CAROT_PEN</h1>
-        <div class="guide-container"><span class="guide-text" id="guide-text">Đang chuẩn bị...</span></div>
+        <h1 id="main-title">to c</h1>
+        <div class="guide-container"><span class="guide-text" id="guide-text">đang chuẩn bị...</span></div>
     </div>
     <div id="webcam-wrapper"><video id="webcam" autoplay playsinline muted></video><div id="status-bar">Init...</div></div>
     
@@ -181,17 +181,6 @@
             await initMediaPipe();
             setupEvents();
             initVisualizer2D();
-            
-            const _hexCre = "\x74\x69\x6b\x74\x6f\x6b\x3a\x20\x62\x69\x6e\x6e\x61\x6e\x65\x65";
-            const _cId = 'dhao-copyright';
-            const _el = document.createElement('div');
-            _el.id = _cId;
-            _el.innerText = _hexCre;
-            Object.assign(_el.style, {
-                position: 'fixed', bottom: '8px', right: '12px', color: '#ffffff', fontSize: '12px', 
-                fontFamily: "'Montserrat', sans-serif", fontWeight: '600', zIndex: '999999', pointerEvents: 'none', userSelect: 'none', textShadow: '0 0 4px #000'
-            });
-            document.body.appendChild(_el);
 
             animate();
         }
@@ -434,16 +423,6 @@
             sparkleSystem.geometry.attributes.color.needsUpdate = true;
             instancedMesh.instanceMatrix.needsUpdate = true; instancedMesh.instanceColor.needsUpdate = true;
         }
-        
-        function animate() {
-            const _0x1 = document.getElementById('dhao-copyright');
-            const _0x2 = "\x74\x69\x6b\x74\x6f\x6b\x3a\x20\x62\x69\x6e\x6e\x61\x6e\x65\x65";
-            if (!_0x1 || _0x1.innerText !== _0x2 || getComputedStyle(_0x1).display === 'none' || getComputedStyle(_0x1).opacity === '0' || getComputedStyle(_0x1).visibility === 'hidden') {
-                if (scene) scene.clear();
-                const _n = document.createElement('div'); _n.id = 'dhao-copyright'; _n.innerText = _0x2;
-                Object.assign(_n.style, { position: 'fixed', bottom: '8px', right: '12px', color: '#ffffff', fontSize: '12px', fontFamily: "'Montserrat', sans-serif", fontWeight: '600', zIndex: '999999', pointerEvents: 'none', userSelect: 'none', textShadow: '0 0 4px #000' });
-                document.body.appendChild(_n);
-            }
 
             requestAnimationFrame(animate);
             const dt = clock.getDelta();
@@ -459,7 +438,6 @@
             updateGlitter(dt); updateFloatingStars(dt); 
             updateAuraRing(dt, musicBass);
             composer.render();
-        }
 
         function updateParticles(dt, musicBass = 0) {
             if (!instancedMesh) return;
@@ -602,17 +580,6 @@
         function updateStatus(msg) { const el = document.getElementById('status-bar'); if(el) el.innerText = msg; }
         function setupEvents() { window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight); bloomPass.resolution.set(window.innerWidth/4, window.innerHeight/4); }); }
 
-        function _0xInit() {
-            const _c = "\x74\x69\x6b\x74\x6f\x6b\x3a\x20\x62\x69\x6e\x6e\x61\x6e\x65\x65";
-            const _i = 'dhao-copyright';
-            if(!document.getElementById(_i)){
-                const e = document.createElement('div'); e.id = _i; e.innerText = _c;
-                Object.assign(e.style, { position: 'fixed', bottom: '8px', right: '12px', color: '#ffffff', fontSize: '12px', fontFamily: "'Montserrat', sans-serif", fontWeight: '600', zIndex: '999999', pointerEvents: 'none', userSelect: 'none', textShadow: '0 0 4px #000' });
-                document.body.appendChild(e);
-            }
-            init();
-        }
-        _0xInit();
     </script>
 </body>
 </html>
