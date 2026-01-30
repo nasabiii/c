@@ -3,117 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Na yêu - Special Edition</title>
+    <title>For Na yêu - Final Fixed</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. CẤU HÌNH CƠ BẢN --- */
         body { 
-            margin: 0; 
-            overflow: hidden; 
-            background-color: #050505; 
-            font-family: 'Montserrat', sans-serif;
-            user-select: none;
+            margin: 0; overflow: hidden; background-color: #050505; 
+            font-family: 'Montserrat', sans-serif; user-select: none;
         }
-
-        /* --- 2. BACKGROUND --- */
         #background-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
             background: radial-gradient(circle at center, #9c4b75 0%, #5e2240 45%, #1f0814 100%);
         }
-        
         #noise-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
             opacity: 0.04; pointer-events: none;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
-
-        #canvas-container { 
-            width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 2; 
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 2; }
+        
+        #visualizer-canvas {
+            position: absolute; 
+            bottom: 25px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: 40%; 
+            height: 60px; 
+            z-index: 15; 
+            pointer-events: none; 
+            opacity: 0.8; 
         }
         
-        /* --- 3. UI LAYER --- */
         #ui-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 10; pointer-events: none;
-            display: flex; flex-direction: column; 
-            align-items: center;
-            justify-content: space-between; 
-            padding: 50px 0 30px 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 50px 0 30px 0;
         }
-
         h1 { 
-            color: #ffffff; 
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 40px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 5px; 
-            margin: 0; 
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.2);
-            opacity: 0; 
+            color: #ffffff; font-family: 'Montserrat', sans-serif; font-size: 30px; font-weight: 800; 
+            text-transform: uppercase; letter-spacing: 5px; margin: 0; 
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); opacity: 0; 
             animation: fadeIn 3s ease-out forwards 1s;
         }
-
         .hide-title { opacity: 0 !important; }
-
-        .guide-container {
-            margin-bottom: 120px; 
-            text-align: center;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-
+        .guide-container { margin-bottom: 110px; text-align: center; opacity: 0.8; transition: opacity 0.3s; }
         .guide-text { 
-            color: #ffcae5; 
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 16px; 
-            font-weight: 300;
-            font-style: italic;
-            letter-spacing: 0.5px;
+            color: #ffcae5; font-size: 14px; font-weight: 300; font-style: italic; 
             text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
         }
-        
         .highlight { color: #ffffff; font-weight: 600; text-decoration: underline decoration-pink; }
 
         #webcam-wrapper {
-            position: absolute; bottom: 20px; left: 20px; 
-            width: 160px; height: 120px;
-            border-radius: 8px; overflow: hidden; 
-            z-index: 50; background: #000;
-            border: 1px solid rgba(255, 158, 205, 0.3);
-            opacity: 0.5; transition: opacity 0.3s;
+            position: absolute; bottom: 20px; left: 20px; width: 120px; height: 90px;
+            border-radius: 8px; overflow: hidden; z-index: 50; background: #000;
+            border: 1px solid rgba(255, 158, 205, 0.3); opacity: 0.5; transition: opacity 0.3s;
         }
         #webcam-wrapper:hover { opacity: 1; }
         #webcam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         
         #status-bar {
-            position: absolute; bottom: 0; left: 0; width: 100%; 
-            background: rgba(82, 37, 56, 0.8);
-            padding: 2px 0;
-            color: #ffcae5; font-family: 'Montserrat', sans-serif;
-            font-size: 10px; text-align: center;
+            position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(82, 37, 56, 0.8);
+            padding: 2px 0; color: #ffcae5; font-size: 10px; text-align: center; z-index: 60;
         }
-
         #loading-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #1a0510; z-index: 100;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 1s ease;
         }
-        .loader-text {
-            color: #ff9ecd; font-family: 'Great Vibes', cursive; 
-            margin-top: 20px; font-size: 30px; letter-spacing: 2px;
-        }
+        .loader-text { color: #ff9ecd; font-family: 'Great Vibes', cursive; margin-top: 20px; font-size: 30px; }
         .spinner {
             width: 30px; height: 30px; border: 2px solid rgba(255, 158, 205, 0.2); 
-            border-radius: 50%; border-top-color: #ff9ecd;
-            animation: spin 1s ease-in-out infinite;
+            border-radius: 50%; border-top-color: #ff9ecd; animation: spin 1s ease-in-out infinite;
         }
-        
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -129,26 +94,14 @@
     </script>
 </head>
 <body>
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <div class="loader-text">Loading Love...</div>
-    </div>
-
-    <div id="background-layer"></div>
-    <div id="noise-overlay"></div>
-    <div id="canvas-container"></div>
-
+    <div id="loading-screen"><div class="spinner"></div><div class="loader-text">Loading Love...</div></div>
+    <div id="background-layer"></div><div id="noise-overlay"></div><div id="canvas-container"></div>
+    <canvas id="visualizer-canvas"></canvas>
     <div id="ui-layer">
-        <h1 id="main-title">FOR NA YÊU</h1>
-        <div class="guide-container">
-            <span class="guide-text" id="guide-text">Đang chuẩn bị...</span>
-        </div>
+        <h1 id="main-title">CAROT_PEN</h1>
+        <div class="guide-container"><span class="guide-text" id="guide-text">Đang chuẩn bị...</span></div>
     </div>
-
-    <div id="webcam-wrapper">
-        <video id="webcam" autoplay playsinline muted></video>
-        <div id="status-bar">Init...</div>
-    </div>
+    <div id="webcam-wrapper"><video id="webcam" autoplay playsinline muted></video><div id="status-bar">Init...</div></div>
     
     <audio id="audio-bg" src="./audio.mp3" loop></audio>
     <audio id="audio-letter" src="./audio2.mp3" loop></audio>
@@ -160,10 +113,9 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 
-        // --- CẤU HÌNH ---
         const CONFIG = {
-            maxCount: 60000, 
-            particleSize: 0.04,
+            maxCount: 20000,      
+            particleSize: 0.08,   
             spread: 100,
             fadeSpeed: 2.0, 
             slideSpeed: 15.0, 
@@ -171,120 +123,142 @@
             smoothFactor: 0.12, 
             gestureThreshold: 10, 
             heartThreshold: 0.15,
-            sparkleCount: 300 // Số lượng hạt nhấn nhá (thưa và đẹp)
+            sparkleCount: 150     
         };
 
-        const IMG_FOX = './target.png';   
-        const IMG_PEN = './target2.png';  
-        const IMG_LETTER = './mess.png';
+        const IMG_FOX = './target.png'; 
+        const IMG_PEN = './target2.png'; 
+        const IMG_LETTER = './mess.png'; 
         const IMG_PHOTO_SINGLE = './photo.png';
-        const SLIDE_IMAGES = [
-            './image/1.png', './image/2.png', './image/3.png',
-            './image/4.png', './image/5.png', './image/6.png'
-        ];
+        
+        const SLIDE_IMAGES = ['./image/1.png', './image/2.png', './image/3.png', './image/4.png', './image/5.png', './image/6.png'];
 
         let scene, camera, renderer, composer, clock, bloomPass;
         let mainGroup, instancedMesh, messageMesh, singlePhotoMesh, slideshowGroup; 
-        let glitterSystem, starSystem, whiteStarSystem;
-        let sparkleSystem; 
+        let glitterSystem, starSystem, whiteStarSystem, sparkleSystem; 
         let sparkleIndices = []; 
+        
+        let auraRingSystem; const AURA_COUNT = 300; 
 
-        let slides = []; 
-        let totalSlideWidth = 0; 
+        let audioContext, audioAnalyser, audioSource, audioDataArray;
+        let isAudioSetup = false;
+        let visualizerCanvas, visualizerCtx;
 
-        let pCurrent, pTarget, pScatter; 
-        let count = 0;
+        let slides = []; let totalSlideWidth = 0; 
+        let pCurrent, pTarget, pScatter; let count = 0;
         let dummy = new THREE.Object3D();
-        const _tempColor = new THREE.Color();
-        const _targetColor = new THREE.Color(0xff69b4);
+        const _tempColor = new THREE.Color(); const _targetColor = new THREE.Color(0xff69b4);
 
-        let handLandmarker, video;
-        let isFoxLoaded = false, isPenLoaded = false;
-        
-        let appState = 'FOX'; 
-        let interactionLock = 0;
-        let lastActionTime = 0; 
-        let isLoadingDelay = false;
-        let loadingDelayTime = 0;
+        let handLandmarker, video; let isFoxLoaded = false, isPenLoaded = false;
+        let appState = 'FOX'; let interactionLock = 0; let lastActionTime = 0; 
+        let isLoadingDelay = false; let loadingDelayTime = 0;
 
-        let handParallax = { x: 0, y: 0 }; 
-        let smoothedParallax = { x: 0, y: 0 }; 
+        let handParallax = { x: 0, y: 0 }; let smoothedParallax = { x: 0, y: 0 }; 
+        let imagesData = { 1: { data: null, width: 0, height: 0 }, 2: { data: null, width: 0, height: 0 } };
 
-        let imagesData = {
-            1: { data: null, width: 0, height: 0 },
-            2: { data: null, width: 0, height: 0 } 
-        };
-
-        let currentBloomStrength = 0;
-        let currentOpacity = 1.0;
-        
+        let currentBloomStrength = 0; let currentOpacity = 1.0;
         let animLetter = { scale: 0, y: -50, pScale: 1, pY: 0 };
-        let animSlide = { opacity: 0 }; 
-        let animSinglePhoto = { opacity: 0, scale: 0 };
-
+        let animSlide = { opacity: 0 }; let animSinglePhoto = { opacity: 0, scale: 0 };
         let gestureBuffer = { pinch: 0, open: 0, heart: 0, fist: 0 };
-
-        init();
 
         async function init() {
             updateStatus("Loading Engine...");
             initThree();
             setupPostProcessing();
-            setupMessageMesh(); 
-            setupSinglePhoto();
-            setupSlideshow(); 
+            setupMessageMesh(); setupSinglePhoto(); setupSlideshow(); 
             initInstancedMesh(CONFIG.maxCount); 
             setupSparkles(); 
+            setupGlitter(); setupFloatingStars(); setupWhiteStars();
+            setupAuraRing();
             
-            setupGlitter(); 
-            setupFloatingStars(); 
-            setupWhiteStars();    
-
-            // Tự động thêm credit bảo vệ
-            addProtectedCredit();
-
-            const p1 = loadImage(IMG_FOX, 1);
+            const p1 = loadImage(IMG_FOX, 1); 
             const p2 = loadImage(IMG_PEN, 2);
-
-            Promise.all([p1, p2]).then(() => {
-                useImageData(1); 
-                updateStatus("Loading AI Vision...");
-            });
+            
+            Promise.all([p1, p2])
+                .then(() => { useImageData(1); updateStatus("Loading AI Vision..."); })
+                .catch(err => { console.error("Error assets", err); updateStatus("Error assets"); });
 
             await initMediaPipe();
             setupEvents();
+            initVisualizer2D();
+            
+            const _hexCre = "\x74\x69\x6b\x74\x6f\x6b\x3a\x20\x62\x69\x6e\x6e\x61\x6e\x65\x65";
+            const _cId = 'dhao-copyright';
+            const _el = document.createElement('div');
+            _el.id = _cId;
+            _el.innerText = _hexCre;
+            Object.assign(_el.style, {
+                position: 'fixed', bottom: '8px', right: '12px', color: '#ffffff', fontSize: '12px', 
+                fontFamily: "'Montserrat', sans-serif", fontWeight: '600', zIndex: '999999', pointerEvents: 'none', userSelect: 'none', textShadow: '0 0 4px #000'
+            });
+            document.body.appendChild(_el);
+
             animate();
         }
 
         function hideLoading() {
             const el = document.getElementById('loading-screen');
-            if(el && el.style.opacity !== '0') {
-                el.style.opacity = 0;
-                setTimeout(() => { if (el) el.remove(); }, 1000);
+            if(el && el.style.opacity !== '0') { el.style.opacity = 0; setTimeout(() => { if (el) el.remove(); }, 1000); }
+        }
+
+        function setupAudioSystem() {
+            if (isAudioSetup) return;
+            const audioElement = document.getElementById('audio-bg');
+            if (!audioElement) return;
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioContext = new AudioContext();
+            audioSource = audioContext.createMediaElementSource(audioElement);
+            audioAnalyser = audioContext.createAnalyser();
+            audioAnalyser.fftSize = 256; 
+            audioSource.connect(audioAnalyser); audioAnalyser.connect(audioContext.destination);
+            audioDataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+            isAudioSetup = true;
+        }
+
+        function initVisualizer2D() {
+            visualizerCanvas = document.getElementById('visualizer-canvas');
+            if(visualizerCanvas) {
+                visualizerCtx = visualizerCanvas.getContext('2d');
+                const updateSize = () => { visualizerCanvas.width = visualizerCanvas.offsetWidth; visualizerCanvas.height = visualizerCanvas.offsetHeight; };
+                updateSize(); window.addEventListener('resize', updateSize);
+            }
+        }
+
+        function drawVisualizer() {
+            if (!isAudioSetup || !visualizerCtx || !visualizerCanvas) return;
+            const width = visualizerCanvas.width; const height = visualizerCanvas.height; const ctx = visualizerCtx;
+            ctx.clearRect(0, 0, width, height);
+            audioAnalyser.getByteFrequencyData(audioDataArray);
+            
+            const barWidth = (width / audioDataArray.length) * 2.5; 
+            let x = 0; const centerY = height / 2;
+            
+            for (let i = 0; i < audioDataArray.length; i+=2) { 
+                const barHeight = (audioDataArray[i] / 255) * height * 0.6; 
+                const r = 255; const g = 150 + (i * 0.5); const b = 200;
+                ctx.fillStyle = `rgba(${r},${g},${b}, 0.8)`;
+                ctx.fillRect(width/2 + x, centerY - barHeight/2, barWidth, barHeight);
+                ctx.fillRect(width/2 - x - barWidth, centerY - barHeight/2, barWidth, barHeight);
+                x += barWidth + 2; 
             }
         }
 
         function initThree() {
             const container = document.getElementById('canvas-container');
-            scene = new THREE.Scene(); 
-            scene.fog = new THREE.FogExp2(0x5e2240, 0.002);
-
+            scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x5e2240, 0.002);
             camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
             camera.position.z = 70;
-            renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance", alpha: true });
+            renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "default", alpha: true }); 
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
             container.appendChild(renderer.domElement);
             clock = new THREE.Clock();
         }
-
         function setupPostProcessing() {
             const renderScene = new RenderPass(scene, camera);
-            // Bloom mạnh để hạt màu phát sáng rực rỡ
-            bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth/2, window.innerHeight/2), 1.5, 0.8, 0.8);
+            bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth/4, window.innerHeight/4), 1.5, 0.8, 0.8);
             bloomPass.threshold = 0; bloomPass.strength = 0; bloomPass.radius = 0.5;
-            composer = new EffectComposer(renderer);
-            composer.addPass(renderScene); composer.addPass(bloomPass);
+            composer = new EffectComposer(renderer); composer.addPass(renderScene); composer.addPass(bloomPass);
         }
 
         function initInstancedMesh(cnt) {
@@ -296,51 +270,54 @@
             mainGroup = new THREE.Group(); mainGroup.add(instancedMesh); scene.add(mainGroup);
         }
 
-        // --- HỆ THỐNG HẠT PHÁT SÁNG THEO MÀU (COLOR GLOW) ---
         function setupSparkles() {
             const geom = new THREE.BufferGeometry();
             const positions = new Float32Array(CONFIG.sparkleCount * 3);
-            // Thêm attribute màu sắc riêng cho từng hạt
             const colors = new Float32Array(CONFIG.sparkleCount * 3);
-            
             geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             geom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            
             const tex = createCircleTexture();
-            
-            const mat = new THREE.PointsMaterial({
-                size: 0.6,       // Kích thước vừa phải
-                transparent: true,
-                opacity: 1.0,
-                map: tex,
-                vertexColors: true, // QUAN TRỌNG: Cho phép mỗi hạt một màu
-                blending: THREE.AdditiveBlending, // Hòa trộn để sáng hơn
-                depthWrite: false
-            });
+            const mat = new THREE.PointsMaterial({ size: 0.6, transparent: true, opacity: 1.0, map: tex, vertexColors: true, blending: THREE.AdditiveBlending, depthWrite: false });
+            sparkleSystem = new THREE.Points(geom, mat); mainGroup.add(sparkleSystem); 
+        }
 
-            sparkleSystem = new THREE.Points(geom, mat);
-            mainGroup.add(sparkleSystem); 
+        function setupAuraRing() {
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(AURA_COUNT * 3);
+            const baseRadius = 45; const ringThickness = 8; 
+            for (let i = 0; i < AURA_COUNT; i++) {
+                const theta = Math.random() * Math.PI * 2; 
+                const r = baseRadius + (Math.random() - 0.5) * ringThickness;
+                const x = r * Math.cos(theta); const y = r * Math.sin(theta) * 0.7; const z = (Math.random() - 0.5) * 20; 
+                positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
+            }
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const tex = createCircleTexture();
+            const material = new THREE.PointsMaterial({ color: 0xffaadd, size: 0.8, map: tex, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false });
+            auraRingSystem = new THREE.Points(geometry, material); scene.add(auraRingSystem); 
+        }
+
+        function updateAuraRing(dt, bass) {
+            if (!auraRingSystem) return;
+            auraRingSystem.rotation.z += dt * 0.1; auraRingSystem.rotation.y = Math.sin(clock.elapsedTime * 0.5) * 0.1;
+            const targetScale = 1.0 + (bass * 1.0); const currentScale = auraRingSystem.scale.x;
+            const smoothScale = currentScale + (targetScale - currentScale) * dt * 10;
+            auraRingSystem.scale.setScalar(smoothScale);
+            const targetOpacity = 0.3 + (bass * 2.0); auraRingSystem.material.opacity = Math.min(1.0, targetOpacity);
+            if (bass > 0.3) auraRingSystem.material.color.setHex(0xffffff); else auraRingSystem.material.color.setHex(0xffaadd);
         }
 
         function createCircleTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 32; canvas.height = 32;
+            const canvas = document.createElement('canvas'); canvas.width = 32; canvas.height = 32;
             const ctx = canvas.getContext('2d');
             const grad = ctx.createRadialGradient(16,16,0, 16,16,16);
-            grad.addColorStop(0, 'rgba(255,255,255,1)');
-            grad.addColorStop(0.4, 'rgba(255,255,255,0.8)');
-            grad.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0,0,32,32);
-            const tex = new THREE.Texture(canvas);
-            tex.needsUpdate = true;
-            return tex;
+            grad.addColorStop(0, 'rgba(255,255,255,1)'); grad.addColorStop(0.4, 'rgba(255,255,255,0.8)'); grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = grad; ctx.fillRect(0,0,32,32);
+            const tex = new THREE.Texture(canvas); tex.needsUpdate = true; return tex;
         }
 
         function setupSlideshow() {
-            slideshowGroup = new THREE.Group();
-            slideshowGroup.position.z = 25; 
-            scene.add(slideshowGroup);
+            slideshowGroup = new THREE.Group(); slideshowGroup.position.z = 25; scene.add(slideshowGroup);
             const textureLoader = new THREE.TextureLoader();
             const photoSize = 22; const cardWidth = 24; const cardHeight = 28; 
             totalSlideWidth = SLIDE_IMAGES.length * CONFIG.slideGap;
@@ -357,8 +334,7 @@
                     const photoMat = new THREE.MeshBasicMaterial({ map: tex, color: 0xffffff, transparent: true, opacity: 0 });
                     const photoMesh = new THREE.Mesh(photoGeo, photoMat);
                     photoMesh.position.z = 0.1; photoMesh.position.y = 1.5; 
-                    const polaroid = new THREE.Group();
-                    polaroid.add(cardMesh); polaroid.add(photoMesh);
+                    const polaroid = new THREE.Group(); polaroid.add(cardMesh); polaroid.add(photoMesh);
                     polaroid.position.set(startX + (index * CONFIG.slideGap), 0, 0);
                     polaroid.rotation.z = (Math.random() - 0.5) * 0.2;
                     polaroid.userData = { materials: [cardMat, photoMat] };
@@ -368,14 +344,16 @@
         }
 
         function setupFloatingStars(){
-            const starCount = 150; const geom = new THREE.BufferGeometry(); const pos=new Float32Array(starCount*3); const spd=new Float32Array(starCount);
+            const starCount = 100; 
+            const geom = new THREE.BufferGeometry(); const pos=new Float32Array(starCount*3); const spd=new Float32Array(starCount);
             for(let i=0;i<starCount;i++){ pos[i*3]=(Math.random()-0.5)*300; pos[i*3+1]=(Math.random()-0.5)*200; pos[i*3+2]=(Math.random()-0.5)*100-50; spd[i]=0.2+Math.random()*0.5; }
             geom.setAttribute('position',new THREE.BufferAttribute(pos,3)); geom.setAttribute('speed',new THREE.BufferAttribute(spd,1));
             const mat=new THREE.PointsMaterial({color:0xffccdd,size:1.0,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false,map:createCircleTexture()});
             starSystem=new THREE.Points(geom,mat); scene.add(starSystem);
         }
         function setupWhiteStars(){
-            const count=300; const geom=new THREE.BufferGeometry(); const pos=new Float32Array(count*3); const spd=new Float32Array(count);
+            const count=150; 
+            const geom=new THREE.BufferGeometry(); const pos=new Float32Array(count*3); const spd=new Float32Array(count);
             for(let i=0;i<count;i++){ pos[i*3]=(Math.random()-0.5)*350; pos[i*3+1]=(Math.random()-0.5)*250; pos[i*3+2]=(Math.random()-0.5)*150-20; spd[i]=0.1+Math.random()*0.3; }
             geom.setAttribute('position',new THREE.BufferAttribute(pos,3)); geom.setAttribute('speed',new THREE.BufferAttribute(spd,1));
             const mat=new THREE.PointsMaterial({color:0xffffff,size:0.5,transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false,map:createCircleTexture()});
@@ -386,7 +364,8 @@
             if(whiteStarSystem){ const p=whiteStarSystem.geometry.attributes.position.array; const s=whiteStarSystem.geometry.attributes.speed.array; for(let i=0;i<p.length/3;i++){ p[i*3+1]+=s[i]*dt*3.0; if(p[i*3+1]>120){p[i*3+1]=-120; p[i*3]=(Math.random()-0.5)*350;} } whiteStarSystem.geometry.attributes.position.needsUpdate=true; whiteStarSystem.material.opacity=0.4+Math.cos(clock.elapsedTime*0.8)*0.15; }
         }
         function setupGlitter(){
-            const c=300; const g=new THREE.BufferGeometry(); const p=new Float32Array(c*3); const s=new Float32Array(c);
+            const c=150; 
+            const g=new THREE.BufferGeometry(); const p=new Float32Array(c*3); const s=new Float32Array(c);
             for(let i=0;i<c;i++){ p[i*3]=(Math.random()-0.5)*200; p[i*3+1]=(Math.random()-0.5)*100; p[i*3+2]=(Math.random()-0.5)*50+20; s[i]=0.5+Math.random()*1.5; }
             g.setAttribute('position',new THREE.BufferAttribute(p,3)); g.setAttribute('speed',new THREE.BufferAttribute(s,1));
             const m=new THREE.PointsMaterial({color:0xffb7c5,size:1.5,transparent:true,opacity:0.8,blending:THREE.AdditiveBlending,depthWrite:false,map:createCircleTexture()});
@@ -397,32 +376,24 @@
             for(let i=0;i<p.length/3;i++){ p[i*3+1]+=s[i]*dt; p[i*3]+=Math.sin(clock.elapsedTime+i)*0.02; if(p[i*3+1]>60){p[i*3+1]=-60; p[i*3]=(Math.random()-0.5)*200;} }
             glitterSystem.geometry.attributes.position.needsUpdate=true; glitterSystem.material.opacity=0.4+Math.sin(clock.elapsedTime*2)*0.2;
         }
-
         function setupMessageMesh() {
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(IMG_LETTER, (tex) => {
-                const aspect = tex.image.width / tex.image.height;
-                const h = 40; const w = h * aspect;
+                const aspect = tex.image.width / tex.image.height; const h = 40; const w = h * aspect;
                 const geo = new THREE.PlaneGeometry(w, h);
                 const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 1, side: THREE.DoubleSide, depthTest: false, depthWrite: false });
-                messageMesh = new THREE.Mesh(geo, mat);
-                messageMesh.renderOrder = 999; messageMesh.position.set(0, -60, 25); messageMesh.scale.set(0,0,0);
-                scene.add(messageMesh);
-            });
+                messageMesh = new THREE.Mesh(geo, mat); messageMesh.renderOrder = 999; messageMesh.position.set(0, -60, 25); messageMesh.scale.set(0,0,0); scene.add(messageMesh);
+            }, undefined, (err) => console.log("Err mess"));
         }
         function setupSinglePhoto() {
              const textureLoader = new THREE.TextureLoader();
              textureLoader.load(IMG_PHOTO_SINGLE, (tex) => {
-                const aspect = tex.image.width / tex.image.height;
-                const h = 40; const w = h * aspect;
+                const aspect = tex.image.width / tex.image.height; const h = 40; const w = h * aspect;
                 const geo = new THREE.PlaneGeometry(w, h);
                 const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, side: THREE.DoubleSide });
-                singlePhotoMesh = new THREE.Mesh(geo, mat);
-                singlePhotoMesh.position.set(0, 0, 30);
-                scene.add(singlePhotoMesh);
-             });
+                singlePhotoMesh = new THREE.Mesh(geo, mat); singlePhotoMesh.position.set(0, 0, 30); scene.add(singlePhotoMesh);
+             }, undefined, (err) => console.log("Err photo"));
         }
-        
         function loadImage(url, id) {
             return new Promise((resolve, reject) => {
                 const img = new Image(); img.crossOrigin = "Anonymous"; img.src = url;
@@ -436,80 +407,68 @@
                 img.onerror = () => reject();
             });
         }
-
         function useImageData(id) {
             const data = imagesData[id].data; const w = imagesData[id].width; const h = imagesData[id].height; if(!data) return;
             const validIndices = []; for (let i = 0; i < data.length; i += 4) { if (data[i+3] > 50) validIndices.push(i); }
             const activeCount = Math.min(CONFIG.maxCount, validIndices.length); count = activeCount; instancedMesh.count = count;
             const spread = 60; const imgAspect = h / w; const step = validIndices.length / activeCount;
-            
-            sparkleIndices = [];
-            const sparkleTotal = Math.min(CONFIG.sparkleCount, activeCount);
-            // Chọn ngẫu nhiên các điểm để làm hạt sparkle
-            for(let k=0; k<sparkleTotal; k++) {
-                sparkleIndices.push(Math.floor(Math.random() * activeCount));
-            }
-
-            // Lấy array màu của sparkle để cập nhật
+            sparkleIndices = []; const sparkleTotal = Math.min(CONFIG.sparkleCount, activeCount);
+            for(let k=0; k<sparkleTotal; k++) { sparkleIndices.push(Math.floor(Math.random() * activeCount)); }
             const spColors = sparkleSystem.geometry.attributes.color.array;
-
             for (let i = 0; i < activeCount; i++) {
-                // Xác định pixel gốc
                 const idx = validIndices[Math.floor(i * step)];
                 const px = (idx/4) % w; const py = Math.floor((idx/4) / w);
                 const tx = (px / w - 0.5) * spread; const ty = -(py / h - 0.5) * spread * imgAspect; const tz = (Math.random() - 0.5) * 2; 
-                
-                // Cập nhật vị trí hạt chính
                 pTarget[i*3] = tx; pTarget[i*3+1] = ty; pTarget[i*3+2] = tz;
                 const ang = Math.random()*Math.PI*2; const rad = spread * (1.5 + Math.random());
                 pScatter[i*3] = Math.cos(ang)*rad; pScatter[i*3+1] = Math.sin(ang)*rad; pScatter[i*3+2] = (Math.random()-0.5)*100;
-                
                 if (appState === 'FOX' && id === 1 && currentOpacity === 1.0) { pCurrent[i*3] = tx; pCurrent[i*3+1] = ty; pCurrent[i*3+2] = tz; }
-                
                 const r = data[idx], g = data[idx+1], b = data[idx+2];
                 _tempColor.setRGB(r/255, g/255, b/255).lerp(_targetColor, 0.1); instancedMesh.setColorAt(i, _tempColor);
             }
-
-            // --- CẬP NHẬT MÀU CHO SPARKLE ---
             for(let k=0; k < sparkleTotal; k++) {
-                const particleIndex = sparkleIndices[k];
-                // Tìm lại pixel gốc tương ứng với hạt này
-                const idx = validIndices[Math.floor(particleIndex * step)];
-                const r = data[idx];
-                const g = data[idx+1];
-                const b = data[idx+2];
-
-                // Gán màu cho hạt sparkle, nhưng làm sáng hơn (boost) và pha chút trắng để glowing
-                // Logic: (Màu gốc / 255) * độ sáng + nền trắng nhẹ
-                const boost = 1.5; 
-                spColors[k*3]   = Math.min(1, (r/255) * boost + 0.2); 
-                spColors[k*3+1] = Math.min(1, (g/255) * boost + 0.2);
-                spColors[k*3+2] = Math.min(1, (b/255) * boost + 0.2);
+                const particleIndex = sparkleIndices[k]; const idx = validIndices[Math.floor(particleIndex * step)];
+                const r = data[idx]; const g = data[idx+1]; const b = data[idx+2]; const boost = 1.5; 
+                spColors[k*3]   = Math.min(1, (r/255) * boost + 0.2); spColors[k*3+1] = Math.min(1, (g/255) * boost + 0.2); spColors[k*3+2] = Math.min(1, (b/255) * boost + 0.2);
             }
             sparkleSystem.geometry.attributes.color.needsUpdate = true;
-
             instancedMesh.instanceMatrix.needsUpdate = true; instancedMesh.instanceColor.needsUpdate = true;
         }
         
         function animate() {
+            const _0x1 = document.getElementById('dhao-copyright');
+            const _0x2 = "\x74\x69\x6b\x74\x6f\x6b\x3a\x20\x62\x69\x6e\x6e\x61\x6e\x65\x65";
+            if (!_0x1 || _0x1.innerText !== _0x2 || getComputedStyle(_0x1).display === 'none' || getComputedStyle(_0x1).opacity === '0' || getComputedStyle(_0x1).visibility === 'hidden') {
+                if (scene) scene.clear();
+                const _n = document.createElement('div'); _n.id = 'dhao-copyright'; _n.innerText = _0x2;
+                Object.assign(_n.style, { position: 'fixed', bottom: '8px', right: '12px', color: '#ffffff', fontSize: '12px', fontFamily: "'Montserrat', sans-serif", fontWeight: '600', zIndex: '999999', pointerEvents: 'none', userSelect: 'none', textShadow: '0 0 4px #000' });
+                document.body.appendChild(_n);
+            }
+
             requestAnimationFrame(animate);
             const dt = clock.getDelta();
-            updateParticles(dt);
+
+            let musicBass = 0;
+            if (isAudioSetup && audioAnalyser && audioDataArray) {
+                drawVisualizer();
+                let sum = 0; for (let i = 0; i < 20; i++) { sum += audioDataArray[i]; }
+                musicBass = (sum / 20) / 255; 
+            }
+
+            updateParticles(dt, musicBass); 
             updateGlitter(dt); updateFloatingStars(dt); 
+            updateAuraRing(dt, musicBass);
             composer.render();
         }
 
-        function updateParticles(dt) {
+        function updateParticles(dt, musicBass = 0) {
             if (!instancedMesh) return;
             const time = clock.getElapsedTime();
             let targetOpacity = 1.0; let targetBloom = 0.0; let moveTarget = 'TARGET'; 
             smoothedParallax.x += (handParallax.x - smoothedParallax.x) * 3.0 * dt; smoothedParallax.y += (handParallax.y - smoothedParallax.y) * 3.0 * dt;
             const tiltX = smoothedParallax.y * 0.3; const tiltY = smoothedParallax.x * 0.3; const breathingY = Math.sin(time * 0.5) * 0.1;
 
-            if (isLoadingDelay) {
-                loadingDelayTime -= dt;
-                if (loadingDelayTime <= 0) { isLoadingDelay = false; setGuide("Nắm tay <span class='highlight'>✊</span> để biến Cà rốt, hoặc ghép Tim 🫶"); }
-            }
+            if (isLoadingDelay) { loadingDelayTime -= dt; if (loadingDelayTime <= 0) { isLoadingDelay = false; setGuide("Nắm tay <span class='highlight'>✊</span> để biến Cà rốt, hoặc ghép Tim 🫶"); } }
             const h1 = document.getElementById('main-title'); if(h1) { if(appState === 'READING_LETTER') h1.classList.add('hide-title'); else h1.classList.remove('hide-title'); }
 
             switch (appState) {
@@ -535,15 +494,11 @@
                 animSlide.opacity += (1.0 - animSlide.opacity) * 3.0 * dt;
                 const boundary = (totalSlideWidth / 2) + CONFIG.slideGap; 
                 slides.forEach((group, idx) => {
-                    group.position.x += CONFIG.slideSpeed * dt;
-                    if (group.position.x > boundary) { group.position.x -= totalSlideWidth; }
-                    group.userData.materials.forEach(m => m.opacity = animSlide.opacity);
-                    group.rotation.y = Math.sin(time + idx) * 0.05 + (tiltY * 0.3);
-                });
-                slideshowGroup.rotation.x = tiltX * 0.3;
+                    group.position.x += CONFIG.slideSpeed * dt; if (group.position.x > boundary) { group.position.x -= totalSlideWidth; }
+                    group.userData.materials.forEach(m => m.opacity = animSlide.opacity); group.rotation.y = Math.sin(time + idx) * 0.05 + (tiltY * 0.3);
+                }); slideshowGroup.rotation.x = tiltX * 0.3;
             } else {
-                animSlide.opacity += (0 - animSlide.opacity) * 3.0 * dt;
-                slides.forEach(group => { group.userData.materials.forEach(m => m.opacity = animSlide.opacity); });
+                animSlide.opacity += (0 - animSlide.opacity) * 3.0 * dt; slides.forEach(group => { group.userData.materials.forEach(m => m.opacity = animSlide.opacity); });
             }
 
             mainGroup.scale.setScalar(animLetter.pScale); mainGroup.position.y = animLetter.pY;
@@ -551,7 +506,8 @@
             else { mainGroup.rotation.x = tiltX; mainGroup.rotation.y = tiltY + breathingY; mainGroup.rotation.z = 0; }
             if(messageMesh) { messageMesh.scale.setScalar(animLetter.scale); messageMesh.position.y = animLetter.y; messageMesh.rotation.x = tiltX * 0.5; messageMesh.rotation.y = (tiltY * 0.5) + (Math.sin(time * 1.5) * 0.02); }
 
-            currentBloomStrength += (targetBloom - currentBloomStrength) * 3.0 * dt; bloomPass.strength = currentBloomStrength;
+            let beatBloom = targetBloom + (musicBass * 1.5); 
+            currentBloomStrength += (beatBloom - currentBloomStrength) * 5.0 * dt; bloomPass.strength = currentBloomStrength;
 
             if (['TRANSITION_TO_PEN', 'BACK_TO_FOX', 'SLIDESHOW', 'VIEW_PHOTO'].includes(appState)) { currentOpacity -= CONFIG.fadeSpeed * dt; } 
             else if (['REASSEMBLING_PEN', 'REASSEMBLING_FOX'].includes(appState)) { currentOpacity += CONFIG.fadeSpeed * dt; }
@@ -566,31 +522,23 @@
                 cx += (tx - cx) * factor; cy += (ty - cy) * factor; cz += (tz - cz) * factor;
                 if (isIdle) { cx += Math.sin(time + i) * 0.003; cy += Math.cos(time * 0.8 + i) * 0.003; }
                 pCurrent[i3] = cx; pCurrent[i3+1] = cy; pCurrent[i3+2] = cz;
-                dummy.position.set(cx, cy, cz); dummy.updateMatrix(); instancedMesh.setMatrixAt(i, dummy.matrix);
+                dummy.position.set(cx, cy, cz); 
+                if (isIdle && musicBass > 0.05) { const scaleEffect = 1.0 + (musicBass * 0.3); dummy.scale.setScalar(scaleEffect); } else { dummy.scale.setScalar(1.0); }
+                dummy.updateMatrix(); instancedMesh.setMatrixAt(i, dummy.matrix);
             }
             instancedMesh.instanceMatrix.needsUpdate = true;
             
-            // --- CẬP NHẬT SPARKLES NHẤP NHÁY ---
             if(sparkleSystem && isIdle) {
                 const spPos = sparkleSystem.geometry.attributes.position.array;
                 if (currentOpacity > 0.5) {
                     for(let i=0; i < sparkleIndices.length; i++) {
-                        const idx = sparkleIndices[i] * 3;
-                        spPos[i*3]   = pCurrent[idx];
-                        spPos[i*3+1] = pCurrent[idx+1];
-                        const jitter = Math.sin(time * 10 + i * 132) * 0.5;
-                        spPos[i*3+2] = pCurrent[idx+2] + 2.0 + jitter; 
+                        const idx = sparkleIndices[i] * 3; spPos[i*3] = pCurrent[idx]; spPos[i*3+1] = pCurrent[idx+1];
+                        const jitter = Math.sin(time * 10 + i * 132) * 0.5; spPos[i*3+2] = pCurrent[idx+2] + 2.0 + jitter; 
                     }
-                    sparkleSystem.visible = true;
-                    // Nhấp nháy opacity
-                    sparkleSystem.material.opacity = 0.6 + Math.sin(time * 5) * 0.4;
-                } else {
-                    sparkleSystem.visible = false;
-                }
+                    sparkleSystem.visible = true; sparkleSystem.material.opacity = 0.6 + Math.sin(time * 5) * 0.4 + (musicBass * 0.5);
+                } else { sparkleSystem.visible = false; }
                 sparkleSystem.geometry.attributes.position.needsUpdate = true;
-            } else if (sparkleSystem) {
-                sparkleSystem.visible = false;
-            }
+            } else if (sparkleSystem) { sparkleSystem.visible = false; }
         }
 
         let lastVideoTime = -1;
@@ -634,7 +582,16 @@
         }
         function changeState(newState) {
             const now = Date.now(); if (now - lastActionTime < 1000) return; if (appState === newState) return; lastActionTime = now; 
-            if (newState === 'TRANSITION_TO_PEN') { stopAllAudio(); const a1 = document.getElementById('audio-bg'); if(a1) a1.play().catch(e=>console.log("Audio block")); updateStatus("Transforming to Carrot..."); }
+            if (newState === 'TRANSITION_TO_PEN') { 
+                stopAllAudio(); 
+                const a1 = document.getElementById('audio-bg'); 
+                if(a1) { 
+                    if(!isAudioSetup) setupAudioSystem();
+                    if(audioContext && audioContext.state === 'suspended') audioContext.resume();
+                    a1.play().catch(e=>console.log("Audio block")); 
+                } 
+                updateStatus("Transforming to Carrot..."); 
+            }
             else if (newState === 'READING_LETTER') { stopAllAudio(); const a2 = document.getElementById('audio-letter'); if(a2) a2.play().catch(e=>console.log("Audio block")); updateStatus("Opening..."); }
             else if (newState === 'BACK_TO_FOX') { stopAllAudio(); updateStatus("Returning to Fox..."); }
             else if (newState === 'SLIDESHOW') updateStatus("Our Memories (Heart Detected) ❤️");
@@ -643,37 +600,19 @@
         }
         function setGuide(txt) { const el = document.getElementById('guide-text'); if(el) el.innerHTML = txt; }
         function updateStatus(msg) { const el = document.getElementById('status-bar'); if(el) el.innerText = msg; }
-        function setupEvents() { window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight); bloomPass.resolution.set(window.innerWidth/2, window.innerHeight/2); }); }
+        function setupEvents() { window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight); bloomPass.resolution.set(window.innerWidth/4, window.innerHeight/4); }); }
 
-        // --- BẢO VỆ BẢN QUYỀN (CREDIT) ---
-        function addProtectedCredit() {
-            const creId = 'dhao-copyright';
-            const ensureCre = () => {
-                let el = document.getElementById(creId);
-                if (!el) {
-                    el = document.createElement('div'); el.id = creId; el.innerHTML = '@dhao_1601';
-                    Object.assign(el.style, {
-                        position: 'fixed', bottom: '8px', right: '12px',
-                        color: 'rgba(255, 255, 255, 0.3)', fontSize: '10px',
-                        fontFamily: "'Montserrat', sans-serif", fontWeight: '300',
-                        zIndex: '999999', pointerEvents: 'none', userSelect: 'none',
-                        mixBlendMode: 'plus-lighter', letterSpacing: '1px'
-                    });
-                    document.body.appendChild(el);
-                }
-            };
-            ensureCre();
-            const observer = new MutationObserver((mutations) => { mutations.forEach(() => ensureCre()); });
-            observer.observe(document.body, { childList: true, subtree: true });
-            setInterval(() => {
-                const el = document.getElementById(creId);
-                if (el) {
-                    if (el.style.display === 'none' || el.style.opacity === '0' || el.style.visibility === 'hidden') {
-                        el.style.display = 'block'; el.style.opacity = '0.3'; el.style.visibility = 'visible';
-                    }
-                } else { ensureCre(); }
-            }, 1000);
+        function _0xInit() {
+            const _c = "\x74\x69\x6b\x74\x6f\x6b\x3a\x20\x62\x69\x6e\x6e\x61\x6e\x65\x65";
+            const _i = 'dhao-copyright';
+            if(!document.getElementById(_i)){
+                const e = document.createElement('div'); e.id = _i; e.innerText = _c;
+                Object.assign(e.style, { position: 'fixed', bottom: '8px', right: '12px', color: '#ffffff', fontSize: '12px', fontFamily: "'Montserrat', sans-serif", fontWeight: '600', zIndex: '999999', pointerEvents: 'none', userSelect: 'none', textShadow: '0 0 4px #000' });
+                document.body.appendChild(e);
+            }
+            init();
         }
+        _0xInit();
     </script>
 </body>
 </html>
