@@ -104,7 +104,7 @@
     <div id="webcam-wrapper"><video id="webcam" autoplay playsinline muted></video><div id="status-bar">Init...</div></div>
     
     <audio id="audio-bg" src="./audio.mp3" loop></audio>
-    <audio id="audio-letter" src="./audio2.mp3" loop></audio>
+    <!-- audio id="audio-letter" src="./audio2.mp3" loop></audio> -->
 
     <script type="module">
         import * as THREE from 'three';
@@ -182,7 +182,6 @@
             setupEvents();
             initVisualizer2D();
 
-            animate();
         }
 
         function hideLoading() {
