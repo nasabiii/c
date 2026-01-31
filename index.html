@@ -181,6 +181,11 @@
             await initMediaPipe();
             setupEvents();
             initVisualizer2D();
+            
+            init();
+            animate();
+            
+            </script>
 
         }
 
@@ -438,7 +443,7 @@
             updateAuraRing(dt, musicBass);
             composer.render();
         }
-        
+
         function updateParticles(dt, musicBass = 0) {
             if (!instancedMesh) return;
             const time = clock.getElapsedTime();
