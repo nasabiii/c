@@ -422,7 +422,7 @@
             sparkleSystem.geometry.attributes.color.needsUpdate = true;
             instancedMesh.instanceMatrix.needsUpdate = true; instancedMesh.instanceColor.needsUpdate = true;
         }
-
+        function animate() {
             requestAnimationFrame(animate);
             const dt = clock.getDelta();
 
@@ -437,7 +437,8 @@
             updateGlitter(dt); updateFloatingStars(dt); 
             updateAuraRing(dt, musicBass);
             composer.render();
-
+        }
+        
         function updateParticles(dt, musicBass = 0) {
             if (!instancedMesh) return;
             const time = clock.getElapsedTime();
